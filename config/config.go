@@ -7,7 +7,7 @@ import (
 )
 
 //go:embed .env.json
-var configJson []byte
+var env []byte
 
 type Config struct {
 	Repo  string `json:"repo"`
@@ -16,7 +16,7 @@ type Config struct {
 
 func Init() *Config {
 	config := &Config{}
-	err := json.Unmarshal(configJson, config)
+	err := json.Unmarshal(env, config)
 	if err != nil {
 		log.Fatal(err)
 		return nil

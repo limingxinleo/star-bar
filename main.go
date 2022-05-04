@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/limingxinleo/star-bar/config"
 	"github.com/limingxinleo/star-bar/repo"
+	"github.com/limingxinleo/star-bar/voice"
 	"github.com/progrium/macdriver/cocoa"
 	"github.com/progrium/macdriver/core"
 	"github.com/progrium/macdriver/objc"
@@ -16,6 +17,7 @@ import (
 
 func main() {
 	cf := config.Init()
+	var starCount int64 = 0
 
 	runtime.LockOSThread()
 
@@ -38,8 +40,14 @@ func main() {
 				repo := new(repo.Repo)
 				err = json.Unmarshal(body, repo)
 				if err == nil {
+					if starCount < repo.StargazersCount && starCount != 0 {
+						voice.Play()
+					}
+
+					starCount = repo.StargazersCount
+
 					core.Dispatch(func() {
-						obj.Button().SetTitle(fmt.Sprintf("HF: %d", repo.StargazersCount))
+						obj.Button().SetTitle(fmt.Sprintf("HF: %d", starCount))
 					})
 				}
 
