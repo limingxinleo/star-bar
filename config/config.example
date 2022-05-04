@@ -1,0 +1,4 @@
+package config
+
+var repo = "hyperf/hyperf"
+var token = "ghp_xxx"
