@@ -15,6 +15,8 @@ import (
 )
 
 func main() {
+	cf := config.Init()
+
 	runtime.LockOSThread()
 
 	cocoa.TerminateAfterWindowsClose = false
@@ -25,8 +27,8 @@ func main() {
 
 		go func() {
 			for {
-				request, _ := http.NewRequest("GET", "https://api.github.com/repos/"+config.Repo, nil)
-				request.Header.Set("Authorization", "Token "+config.Token)
+				request, _ := http.NewRequest("GET", "https://api.github.com/repos/"+cf.Repo, nil)
+				request.Header.Set("Authorization", "Token "+cf.Token)
 				response, err := (&http.Client{}).Do(request)
 				if err != nil {
 					continue
