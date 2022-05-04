@@ -37,7 +37,6 @@ func main() {
 				body, _ := io.ReadAll(response.Body)
 				repo := new(repo.Repo)
 				err = json.Unmarshal(body, repo)
-				fmt.Println(repo)
 				if err == nil {
 					core.Dispatch(func() {
 						obj.Button().SetTitle(fmt.Sprintf("HF: %d", repo.StargazersCount))
