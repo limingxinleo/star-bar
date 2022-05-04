@@ -41,6 +41,10 @@ go build -o star-bar main.go
         <true/>
         <key>WorkingDirectory</key>
         <string>/tmp</string>
+        <key>StandardErrorPath</key>
+        <string>/tmp/star-bar.log</string>
+        <key>StandardOutPath</key>
+        <string>/tmp/star-bar.log</string>
     </dict>
 </plist>
 ```
