@@ -18,7 +18,6 @@ func Init() {
 	var err error
 	if dec, data, err = minimp3.DecodeFull(ding); err != nil {
 		log.Fatal(err)
-		return
 	}
 
 	if context, err = oto.NewContext(dec.SampleRate, dec.Channels, 2, 1024); err != nil {

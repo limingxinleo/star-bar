@@ -28,7 +28,6 @@ func main() {
 		obj := cocoa.NSStatusBar_System().StatusItemWithLength(cocoa.NSVariableStatusItemLength)
 		obj.Retain()
 		obj.Button().SetTitle("GitHub Star")
-
 		go func() {
 			for {
 				request, _ := http.NewRequest("GET", "https://api.github.com/repos/"+cf.Repo, nil)
@@ -43,7 +42,7 @@ func main() {
 				err = json.Unmarshal(body, repo)
 				if err == nil {
 					if starCount < repo.StargazersCount && starCount != 0 {
-						voice.Play()
+						go voice.Play()
 					}
 
 					starCount = repo.StargazersCount
@@ -53,7 +52,7 @@ func main() {
 					})
 				}
 
-				time.Sleep(time.Minute)
+				<-time.After(time.Minute)
 			}
 		}()
 		itemQuit := cocoa.NSMenuItem_New()
@@ -63,7 +62,6 @@ func main() {
 		menu := cocoa.NSMenu_New()
 		menu.AddItem(itemQuit)
 		obj.SetMenu(menu)
-
 	})
 	app.Run()
 }
