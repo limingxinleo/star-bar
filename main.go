@@ -17,6 +17,8 @@ import (
 
 func main() {
 	cf := config.Init()
+	voice.Init()
+
 	var starCount int64 = 0
 
 	runtime.LockOSThread()

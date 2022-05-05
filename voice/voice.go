@@ -10,28 +10,29 @@ import (
 
 //go:embed ding.mp3
 var ding []byte
+var context *oto.Context
+var data []byte
 
-func Play() {
+func Init() {
 	var dec *minimp3.Decoder
-	var data []byte
 	var err error
 	if dec, data, err = minimp3.DecodeFull(ding); err != nil {
 		log.Fatal(err)
 		return
 	}
 
-	var context *oto.Context
 	if context, err = oto.NewContext(dec.SampleRate, dec.Channels, 2, 1024); err != nil {
 		log.Fatal(err)
 	}
+}
 
+func Play() {
 	var player = context.NewPlayer()
 	player.Write(data)
 
 	<-time.After(time.Second)
 
-	dec.Close()
-	if err = player.Close(); err != nil {
+	if err := player.Close(); err != nil {
 		log.Fatal(err)
 	}
 }
