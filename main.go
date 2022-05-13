@@ -26,7 +26,9 @@ func main() {
 	cocoa.TerminateAfterWindowsClose = false
 	app := cocoa.NSApp_WithDidLaunch(func(n objc.Object) {
 		obj := cocoa.NSStatusBar_System().StatusItemWithLength(cocoa.NSVariableStatusItemLength)
+		fmt.Println("Retain")
 		obj.Retain()
+		fmt.Println("Set Title")
 		obj.Button().SetTitle("GitHub Star")
 		go func() {
 			for {
@@ -55,13 +57,16 @@ func main() {
 				<-time.After(time.Minute)
 			}
 		}()
+		fmt.Println("New Menu Item")
 		itemQuit := cocoa.NSMenuItem_New()
 		itemQuit.SetTitle("退出")
 		itemQuit.SetAction(objc.Sel("terminate:"))
 
+		fmt.Println("New Menu")
 		menu := cocoa.NSMenu_New()
 		menu.AddItem(itemQuit)
 		obj.SetMenu(menu)
 	})
+	fmt.Println("Run")
 	app.Run()
 }
