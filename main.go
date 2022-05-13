@@ -25,6 +25,7 @@ func main() {
 
 	cocoa.TerminateAfterWindowsClose = false
 	app := cocoa.NSApp_WithDidLaunch(func(n objc.Object) {
+		fmt.Println("Get Status Bar")
 		obj := cocoa.NSStatusBar_System().StatusItemWithLength(cocoa.NSVariableStatusItemLength)
 		fmt.Println("Retain")
 		obj.Retain()
