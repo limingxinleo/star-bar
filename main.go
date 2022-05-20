@@ -16,12 +16,12 @@ import (
 )
 
 func main() {
+	runtime.LockOSThread()
+
 	cf := config.Init()
 	voice.Init()
 
 	var starCount int64 = 0
-
-	runtime.LockOSThread()
 
 	cocoa.TerminateAfterWindowsClose = false
 	app := cocoa.NSApp_WithDidLaunch(func(n objc.Object) {
