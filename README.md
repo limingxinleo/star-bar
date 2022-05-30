@@ -17,6 +17,9 @@
 go build -o star-bar main.go
 ```
 
+> M1 芯片临时解决方案
+> `GOOS=darwin GOARCH=amd64 CGO_CFLAGS="-arch x86_64" CGO_ENABLED=1 go build -o star-bar main.go`
+
 编写对应的 plist
 
 > ProgramArguments 换成对应的脚本地址
