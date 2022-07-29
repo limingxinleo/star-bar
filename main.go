@@ -35,8 +35,9 @@ func main() {
 			for {
 				request, _ := http.NewRequest("GET", "https://api.github.com/repos/"+cf.Repo, nil)
 				request.Header.Set("Authorization", "Token "+cf.Token)
-				response, err := (&http.Client{}).Do(request)
+				response, err := (&http.Client{Timeout: time.Second * 5}).Do(request)
 				if err != nil {
+					fmt.Println(err)
 					continue
 				}
 
