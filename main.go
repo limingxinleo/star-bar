@@ -21,7 +21,8 @@ func main() {
 	cf := config.Init()
 	voice.Init()
 
-	var starCount int64 = 0
+	var starCount uint64 = 0
+	title := "GitHub"
 
 	cocoa.TerminateAfterWindowsClose = false
 	app := cocoa.NSApp_WithDidLaunch(func(n objc.Object) {
@@ -30,7 +31,9 @@ func main() {
 		fmt.Println("Retain")
 		obj.Retain()
 		fmt.Println("Set Title")
-		obj.Button().SetTitle("GitHub Star")
+		obj.Button().SetTitle(title)
+		nextListen := make(chan bool)
+		key := 0
 		go func() {
 			for {
 				request, _ := http.NewRequest("GET", "https://api.github.com/repos/"+cf.Repo, nil)
@@ -42,7 +45,7 @@ func main() {
 				}
 
 				body, _ := io.ReadAll(response.Body)
-				repo := new(repo.Repo)
+				repo := &repo.Repo{}
 				err = json.Unmarshal(body, repo)
 				if err == nil {
 					if starCount < repo.StargazersCount && starCount != 0 {
@@ -51,12 +54,24 @@ func main() {
 
 					starCount = repo.StargazersCount
 
+					switch key % 2 {
+					case 0:
+						title = fmt.Sprintf("Star: %d", starCount)
+						break
+					case 1:
+						title = fmt.Sprintf("Issue: %d", repo.OpenIssuesCount)
+					}
+
 					core.Dispatch(func() {
-						obj.Button().SetTitle(fmt.Sprintf("HF: %d", starCount))
+						obj.Button().SetTitle(title)
 					})
 				}
 
-				<-time.After(time.Minute)
+				select {
+				case <-nextListen:
+					key++
+				case <-time.After(time.Minute):
+				}
 			}
 		}()
 		fmt.Println("New Menu Item")
@@ -64,8 +79,16 @@ func main() {
 		itemQuit.SetTitle("退出")
 		itemQuit.SetAction(objc.Sel("terminate:"))
 
+		issueItem := cocoa.NSMenuItem_New()
+		issueItem.SetTitle("更换")
+		issueItem.SetAction(objc.Sel("nextListen:"))
+		cocoa.DefaultDelegateClass.AddMethod("nextListen:", func(_ objc.Object) {
+			nextListen <- true
+		})
+
 		fmt.Println("New Menu")
 		menu := cocoa.NSMenu_New()
+		menu.AddItem(issueItem)
 		menu.AddItem(itemQuit)
 		obj.SetMenu(menu)
 	})

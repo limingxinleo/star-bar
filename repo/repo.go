@@ -2,6 +2,7 @@ package repo
 
 type Repo struct {
 	FullName        string `json:"full_name"`
-	StargazersCount int64  `json:"stargazers_count"`
-	ForksCount      int64  `json:"forks_count"`
+	StargazersCount uint64 `json:"stargazers_count"`
+	ForksCount      uint64 `json:"forks_count"`
+	OpenIssuesCount uint64 `json:"open_issues_count"`
 }
