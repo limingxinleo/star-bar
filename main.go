@@ -61,11 +61,11 @@ func main() {
 
 					switch key % 2 {
 					case 0:
-						title = fmt.Sprintf("%d", starCount)
+						title = fmt.Sprintf(" %d", starCount)
 						toolTip = "关注数"
 						break
 					case 1:
-						title = fmt.Sprintf("%d", repo.OpenIssuesCount)
+						title = fmt.Sprintf(" %d", repo.OpenIssuesCount)
 						toolTip = "问题数"
 					}
 
