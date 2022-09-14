@@ -23,6 +23,7 @@ func main() {
 
 	var starCount uint64 = 0
 	title := "GitHub"
+	toolTip := ""
 
 	cocoa.TerminateAfterWindowsClose = false
 	app := cocoa.NSApp_WithDidLaunch(func(n objc.Object) {
@@ -32,6 +33,10 @@ func main() {
 		obj.Retain()
 		fmt.Println("Set Title")
 		obj.Button().SetTitle(title)
+		logo := cocoa.NSImage_InitWithURL(core.NSURL_Init("https://kycmd-pub.knowyourself.cc/github/logo-standard.png"))
+		logo.SetSize(core.NSMakeSize(18, 18))
+		obj.Button().SetImage(logo)
+		obj.Button().SetImagePosition(2)
 		nextListen := make(chan bool)
 		key := 0
 		go func() {
@@ -56,14 +61,17 @@ func main() {
 
 					switch key % 2 {
 					case 0:
-						title = fmt.Sprintf("Star: %d", starCount)
+						title = fmt.Sprintf("%d", starCount)
+						toolTip = "关注数"
 						break
 					case 1:
-						title = fmt.Sprintf("Issue: %d", repo.OpenIssuesCount)
+						title = fmt.Sprintf("%d", repo.OpenIssuesCount)
+						toolTip = "问题数"
 					}
 
 					core.Dispatch(func() {
 						obj.Button().SetTitle(title)
+						obj.Button().SetToolTip(toolTip)
 					})
 				}
 
